@@ -1,0 +1,38 @@
+b Write a LEX Program to scan reserved word & Identifiers of C Language. 
+
+
+%{
+    #include <stdio.h>
+
+    int count = 0;
+%}
+
+LETTER  [a-zA-Z]
+DIGIT   [0-9]
+USCORE  [_]
+
+%%
+({LETTER}|{USCORE})({LETTER}|{DIGIT}|{USCORE})*  {
+    count++;
+}
+
+.|\n    { }
+%%
+
+int main()
+{
+    yyin = fopen("ex.txt", "r");
+
+    if (yyin == NULL)
+    {
+        printf("File not found\n");
+        return 1;
+    }
+
+    yylex();
+    fclose(yyin);
+
+    printf("No of identifiers = %d\n", count);
+
+    return 0;
+}
