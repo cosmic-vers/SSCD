@@ -1,0 +1,51 @@
+a. Program to recognize a valid arithmetic expression and to recognize the identifiers and    operators present print them separately. 
+
+%{
+    #include <stdio.h>
+
+    int opdcount = 0, oprcount = 0;
+    int i = 0, j = 0, k = 0;
+
+    char opd[100], opr[100];
+%}
+
+OPERATOR    [+\-*/]
+OPERANDS    [a-zA-Z0-9]+
+
+%%
+{OPERATOR} {
+    oprcount++;
+    opr[i++] = yytext[0];
+    opr[i++] = ' ';
+}
+
+{OPERANDS} {
+    opdcount++;
+
+    for (j = 0; j < yyleng; j++)
+        opd[k++] = yytext[j];
+
+    opd[k++] = ' ';
+}
+
+\n      { }
+.       { }
+%%
+
+int main()
+{
+    yylex();
+
+    opd[k] = '\0';
+    opr[i] = '\0';
+
+    if ((opdcount - oprcount) != 1)
+        printf("Not valid expression\n");
+    else
+        printf("Valid expression\n");
+
+    printf("Operands = %s and count = %d\n", opd, opdcount);
+    printf("Operators = %s and count = %d\n", opr, oprcount);
+
+    return 0;
+}
