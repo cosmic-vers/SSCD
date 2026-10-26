@@ -1,0 +1,51 @@
+%{
+    #include <stdio.h>
+    #include <ctype.h>
+
+    int yylex(void);
+    int yyerror(const char *s);
+%}
+
+%token ta tb
+
+%%
+V
+    :
+    | ta ta ta ta ta ta ta ta ta ta p '\n' {
+        printf("Valid\n");
+    }
+    ;
+
+p
+    : ta p
+    | tb
+    ;
+%%
+
+int yylex(void)
+{
+    int c;
+
+    while ((c = getchar()) == ' ')
+        ;
+
+    if (c == 'a')
+        return ta;
+
+    if (c == 'b')
+        return tb;
+
+    return c;
+}
+
+int main()
+{
+    yyparse();
+    return 0;
+}
+
+int yyerror(const char *s)
+{
+    printf("Error\n");
+    return 0;
+}
